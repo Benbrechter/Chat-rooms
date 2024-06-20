@@ -1,4 +1,4 @@
-const {Message, User} = require('../models')
+const {Chatroom, User} = require('../models')
 const { signToken, AuthenticationError } = require('../utils/auth');
 
 const resolvers = {
@@ -14,9 +14,24 @@ const resolvers = {
       const user = await User.find()
       return user
     },
-    getAllMessages: async () => {
-        const message = await Message.find()
-        return message
+    getAllChatrooms: async () => {
+        const chatroom = await Chatroom.find()
+
+        return chatroom 
+    },
+    getChatroom: async (parent, {id}, context) => {
+        try{
+            const chatroom = await Chatroom.findById(id);
+            
+            if(!chatroom){
+                throw new Error('chatroom not found')
+            }
+
+            return chatroom
+
+        }catch(error){
+            throw new Error(`failed to get chatroom`)
+        }
     }
     },
 
@@ -42,13 +57,49 @@ const resolvers = {
               return {token, user} 
     
         },
-        addMessage: async (parent, args, context) => {
+        addMessage: async (parent, { chatroomId, content, userId }, context) => {
+          try{
+            //checks if user is authenticated
+            if (!content.user) {
+                throw new AuthenticationError('you must be loggged in');
+            }
+            //finds the chatroom by Id
+            const chatroom = await Chatroom.findById(chatroomId);
+            
+            if(!chatroom){
+                throw new Error('Chatroom not found');
+            }
+            //created a new message variable
+            const newMessage = {
+                content,
+                sender: userId || context.user._id,
+                createdAt: new Date()
+            };
+            //pushes the new message into the imbedded messages schema 
+            chatroom.messages.push(newMessage);
+
+            await chatroom.save();
+            return chatroom
+
+          }catch(error){
+            throw new Error('failed to add message')
+          }
+        },
+        addChatroom: async (parent, context, args) => {
             if(context.user){
-                const message = await Message.create({...args})
-                return message
+                const chatroom = await Chatroom.create({...args})
+
+                return chatroom
             }
             throw AuthenticationError
-        }
+        },
+        updateUser: async (parent, args, context) => {
+            if (context.user) {
+              return await User.findByIdAndUpdate(context.user._id, args, { new: true });
+            }
+      
+            throw AuthenticationError;
+          }
     }
 }
 
