@@ -8,9 +8,8 @@ const messageSchema = new Schema({
         minlength: 1,
         maxlength: 1000
     },
-    userId: {
-        type: Schema.Types.ObjectId,
-        ref: "User"
+    username: {
+        type: String    
     },
     createdAt: {
         type: Date,
