@@ -1,8 +1,17 @@
 {
   "name": "chat-room",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "version": "1.0.0",
+  "lockfileVersion": 3,
+  "requires": true,
+  "author": "",
+  "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "main": "server/server.js",
+  "packages": {},
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
   "scripts": {
     "build": "cd client && npm run build",
     "dev": "concurrently \"cd server && npm run watch\" \"cd client && npm run dev\"",
@@ -11,19 +20,7 @@
     "start": "node server/server.js"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "apollo-server-express": "^3.13.0",
     "mongoose": "^8.4.1"
-  },
-  "devDependencies": {
-    "@types/react": "^18.2.66",
-    "@types/react-dom": "^18.2.22",
-    "@vitejs/plugin-react-swc": "^3.5.0",
-    "eslint": "^8.57.0",
-    "eslint-plugin-react": "^7.34.1",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.6",
-    "vite": "^5.2.0"
   }
 }
