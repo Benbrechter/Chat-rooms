@@ -30,7 +30,7 @@ module.exports = {
       console.log('Invalid token');
     }
 
-    return req;
+    return { user: req.user };
   },
   signToken: function ({ firstName, email, _id }) {
     const payload = { firstName, email, _id };

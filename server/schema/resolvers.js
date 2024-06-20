@@ -21,6 +21,7 @@ const resolvers = {
     },
     getChatroom: async (parent, {id}, context) => {
         try{
+            console.log(`Fetching chatroom with ID: ${id}`);
             const chatroom = await Chatroom.findById(id);
             
             if(!chatroom){
@@ -57,41 +58,48 @@ const resolvers = {
               return {token, user} 
     
         },
-        addMessage: async (parent, { chatroomId, content, userId }, context) => {
+        addMessage: async (parent, { chatroomId, content, userId}, context) => {
+            console.log('Context:', context);
+            console.log('User:', context.user);
           try{
             //checks if user is authenticated
-            if (!content.user) {
+            if (!context.user) {
                 throw new AuthenticationError('you must be loggged in');
             }
             //finds the chatroom by Id
             const chatroom = await Chatroom.findById(chatroomId);
-            
             if(!chatroom){
                 throw new Error('Chatroom not found');
             }
             //created a new message variable
             const newMessage = {
-                content,
-                sender: userId || context.user._id,
-                createdAt: new Date()
+                messageText: content,
+                username: context.user.username,
+                createdAt: new Date().toISOString()
             };
             //pushes the new message into the imbedded messages schema 
             chatroom.messages.push(newMessage);
 
-            await chatroom.save();
-            return chatroom
+            const updatedChatroom = await chatroom.save();
 
-          }catch(error){
-            throw new Error('failed to add message')
-          }
-        },
-        addChatroom: async (parent, context, args) => {
-            if(context.user){
-                const chatroom = await Chatroom.create({...args})
-
-                return chatroom
+             if (!updatedChatroom) {
+                throw new Error('Failed to save the updated chatroom');
             }
+
+             return updatedChatroom;
+            }catch (error) {
+                console.error('Error in addMessage resolver:', error);
+                throw error; // Throw the original error
+              }
+        },
+        addChatroom: async (parent, args) => {
+         try{
+            const chatroom = await Chatroom.create({...args})
+
+            return chatroom
+         }catch(error){
             throw AuthenticationError
+         }
         },
         updateUser: async (parent, args, context) => {
             if (context.user) {
@@ -99,7 +107,45 @@ const resolvers = {
             }
       
             throw AuthenticationError;
-          }
+          },
+          addFriend: async (parent, { userId, friendId }, context) => {
+            try {
+              // Ensure both userId and friendId are provided
+              if (!userId || !friendId) {
+                throw new Error('Both userId and friendId are required');
+              }
+      
+              // Find both users by their IDs
+              const user = await User.findById(userId);
+              const friend = await User.findById(friendId);
+      
+              if (!user) {
+                throw new Error('User not found');
+              }
+      
+              if (!friend) {
+                throw new Error('Friend not found');
+              }
+      
+              // Add friendId to user's friends list if not already added
+              if (!user.friends.includes(friendId)) {
+                user.friends.push(friendId);
+                await user.save();
+              }
+      
+              // Add userId to friend's friends list if not already added
+              if (!friend.friends.includes(userId)) {
+                friend.friends.push(userId);
+                await friend.save();
+              }
+      
+              // Return the updated user
+              return user.populate('friends');
+            } catch (error) {
+              console.error(`Failed to add friend: ${error.message}`);
+              throw new Error(`Failed to add friend: ${error.message}`);
+            }
+          },
     }
 }
 
