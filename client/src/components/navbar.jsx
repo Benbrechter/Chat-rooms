@@ -1,6 +1,7 @@
 
-function Sidebar({currentPage, handlePageChange}) {
+function Navbar({currentPage, handlePageChange}) {
     return (
+      <div className="nav-bar">
         <ul>
           <li>
             <a
@@ -34,7 +35,8 @@ function Sidebar({currentPage, handlePageChange}) {
             </a>
           </li>
         </ul>
+      </div>  
       );
 }
 
-export default Sidebar
+export default Navbar
