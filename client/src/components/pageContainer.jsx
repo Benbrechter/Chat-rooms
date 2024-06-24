@@ -1,37 +1,25 @@
-import {useState} from 'react'
-import Sidebar from './sidebar'
-import Navbar from './navbar'
-import Home from './pages/home'
-import Profile from './pages/profile'
-import Chat from './pages/chat'
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import Sidebar from './sidebar';
+import Navbar from './navbar';
+import Home from './pages/home';
+import Profile from './pages/profile';
+import Chat from './pages/chat';
 
 export default function PageContainer() {
-    const [currentPage, setCurrentPage] = useState('Home')
-
-    const renderPage = () => {
-        if (currentPage === 'Home') {
-            return <Home />;
-        }
-        if (currentPage === 'Profile') {
-            return <Profile />;
-        }
-        if (currentPage === 'Chat') {
-            return <Chat />;
-        }
-
-    };
-
-    const handlePageChange = (page) => setCurrentPage(page);
-
-    return(
-        <div>
-        <Navbar currentPage={currentPage} handlePageChange={handlePageChange} />
+  return (
+      <div>
+        <Navbar />
         <div className='page-container'>
-            {/* We are passing the currentPage from state and the function to update it */}
-        <Sidebar currentPage={currentPage} handlePageChange={handlePageChange} />
-            {/* Here we are calling the renderPage method which will return a component  */}
-        <main>{renderPage()}</main> 
+          <Sidebar />
+          <main>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/chatroom/:id" element={<Chat />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </main>
         </div>
-        </div>
-    )
+      </div>
+  );
 }
