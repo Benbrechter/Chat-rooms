@@ -51,3 +51,34 @@ query GetChatroom($id: ID!) {
   }
 }
 `
+export const QUERY_ALLCHATROOMS = gql`
+query GetAllChatrooms {
+  getAllChatrooms {
+    _id
+    title
+    img
+    users {
+      _id
+      username
+      email
+      password
+      friends {
+        _id
+        username
+        email
+        password
+        bio
+        profilePicture
+      }
+      bio
+      profilePicture
+    }
+    messages {
+      _id
+      messageText
+      username
+      createdAt
+    }
+  }
+}
+`

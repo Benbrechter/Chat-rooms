@@ -1,8 +1,12 @@
+import React from 'react';
 
-export default function Profile() {
+function Profile() {
+    console.log('rendering Profile')
     return(
         <div>
             <h1>yayay</h1>
         </div>
     )
 }
+
+export default Profile
