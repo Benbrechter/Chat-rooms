@@ -6,10 +6,12 @@ import { useQuery } from '@apollo/client';
 import {QUERY_ALLCHATROOMS} from '../utils/queries'
 
 function Sidebar() {
+  //use navigation and link instead of conditional rendering
   const navigate = useNavigate();
+  //we are assigning the variables to the use Query ALL Chatrooms 
   const { loading, data, error } = useQuery(QUERY_ALLCHATROOMS);
   const chatroomsData = data?.getAllChatrooms || [];
-
+//loading and eror handeling
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
@@ -25,6 +27,7 @@ function Sidebar() {
   return (
     <div className="side-bar">
       <ul>
+        {/* giving each element a key is needed because it lets the computer know which element it is clicking*/}
         {chatroomsData.map((chatroom, index) => (
           <li key={chatroom.id || `chatroom-${index}` }>
             <Link 
@@ -32,6 +35,7 @@ function Sidebar() {
               className={location.pathname === `/chatroom/${chatroom._id}` ? 'active' : ''}
               onClick={() => handleChatroomClick(chatroom._id)}
             >
+              {/* passing through the chatroom props so I can use the chatroom data to display each chat room name */}
               <ChatroomIcon chatroom={chatroom} />
             </Link>
           </li>
