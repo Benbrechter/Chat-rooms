@@ -47,6 +47,7 @@ function Chat() {
 
   const chatroomData = data?.getChatroom || [];
  
+
   return (
     <div>
       <h1>{chatroomData.title}</h1>
