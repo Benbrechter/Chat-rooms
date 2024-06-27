@@ -12,6 +12,7 @@ import {
   });
   import { setContext } from '@apollo/client/link/context';
 
+
   const authLink = setContext((_, { headers }) => {
     // get the authentication token from local storage if it exists
     const token = localStorage.getItem('id_token');
@@ -36,7 +37,7 @@ function App() {
         <ApolloProvider client={client}>
             <Router>
                 <PageContainer />
-            </Router>
+            </Router>  
         </ApolloProvider>
     )
 };

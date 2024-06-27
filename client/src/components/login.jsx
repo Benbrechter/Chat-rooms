@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { LOGIN } from '../utils/mutations';
-
 import Auth from '../utils/auth'
 
 export default function Login(props){
@@ -18,6 +17,7 @@ export default function Login(props){
         [name]: value,
       });
     };
+
     const handleFormSubmit = async (event) => {
         event.preventDefault();
         console.log(formState);
@@ -27,6 +27,8 @@ export default function Login(props){
           });
     
           Auth.login(data.login.token);
+
+
         } catch (e) {
           console.error(e);
         }

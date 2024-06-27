@@ -5,15 +5,17 @@ import {ADD_MESSAGE} from '../../utils/mutations'
 import { useContext, useState } from 'react';
 import { useMutation } from '@apollo/client';
 
+
 function Chat() {
   //use params allows you to use the params in the search bar this is where the id is stored
     const { id } = useParams();
+
+    const [formState, setFormState] = useState({messageText: ''});
+    const [addMessage] = useMutation(ADD_MESSAGE);
     //assigning the variables to the query with a variable ID
   const {loading, data, error} = useQuery(QUERY_CHATROOM, {
     variables: { id },
   });
-  const [formState, setFormState] = useState({messageText: '',username: ''});
-  const [addMessage] = useMutation(ADD_MESSAGE);
 
   const handleChange = (event) => {
     const{name, value} = event.target;
@@ -33,7 +35,7 @@ function Chat() {
         },
       });
 
-      setFormState({ messageText: '', username: '' });
+      setFormState({ messageText: ''});
     }catch(error){
       console.log(error)
     }
@@ -45,7 +47,6 @@ function Chat() {
 
   const chatroomData = data?.getChatroom || [];
  
-
   return (
     <div>
       <h1>{chatroomData.title}</h1>
