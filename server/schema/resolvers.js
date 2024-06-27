@@ -71,10 +71,12 @@ const resolvers = {
             if(!chatroom){
                 throw new Error('Chatroom not found');
             }
+             
+
             //created a new message variable
             const newMessage = {
                 messageText: content,
-                username: context.username,
+                username: context.user.username,
                 createdAt: new Date().toISOString()
             };
             //pushes the new message into the imbedded messages schema 
