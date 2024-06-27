@@ -64,7 +64,7 @@ const resolvers = {
           try{
             //checks if user is authenticated
             if (!context.user) {
-                throw new AuthenticationError('you must be loggged in');
+                throw AuthenticationError;
             }
             //finds the chatroom by Id
             const chatroom = await Chatroom.findById(chatroomId);
@@ -74,7 +74,7 @@ const resolvers = {
             //created a new message variable
             const newMessage = {
                 messageText: content,
-                username: context.user.username,
+                username: context.username,
                 createdAt: new Date().toISOString()
             };
             //pushes the new message into the imbedded messages schema 

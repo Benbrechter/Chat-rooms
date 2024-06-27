@@ -99,7 +99,7 @@ mutation AddChatroom($title: String!) {
 `
 
 export const ADD_MESSAGE = gql`
-mutation Mutation($chatroomId: ID!, $content: String!) {
+mutation AddMessage($chatroomId: ID!, $content: String!) {
   addMessage(chatroomId: $chatroomId, content: $content) {
     _id
     title
