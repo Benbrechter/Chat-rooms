@@ -4,11 +4,8 @@ const { signToken, AuthenticationError } = require('../utils/auth');
 const resolvers = {
    Query: {
     me: async (parent, args, context ) => {
-        if(context.user){
             const user = await User.findById(context.user._id).populate('friends')
             return user
-        }
-        throw AuthenticationError
     },
     getAllUser: async () => {
       const user = await User.find()
@@ -104,12 +101,29 @@ const resolvers = {
          }
         },
         updateUser: async (parent, args, context) => {
-            if (context.user) {
-              return await User.findByIdAndUpdate(context.user._id, args, { new: true });
+          if (context.user) {
+            try {
+              const updatedUser = await User.findByIdAndUpdate(
+                context.user._id, 
+                args, 
+                { new: true }
+              );
+    
+              if (!updatedUser) {
+                throw new Error('User not found');
+              }
+    
+              const token = signToken(updatedUser);
+    
+              return { token, user: updatedUser };
+            } catch (error) {
+              console.error('Error updating user:', error);
+              throw new Error('Failed to update user');
             }
-      
-            throw AuthenticationError;
-          },
+          }
+    
+          throw new AuthenticationError('You need to be logged in!');
+        },
           addFriend: async (parent, { userId, friendId }, context) => {
             try {
               // Ensure both userId and friendId are provided

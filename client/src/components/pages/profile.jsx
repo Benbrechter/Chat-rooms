@@ -1,13 +1,11 @@
 import React, { useContext } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
-import { UPDATE_USER } from '../../utils/mutations';
 import  Auth  from '../../utils/auth';
 import { Link } from 'react-router-dom';
 
 
 
 function Profile() {
-    const [updateUser] = useMutation(UPDATE_USER)
+
 
     // Use Auth.getProfile() to get user information from the token
     const userProfile = Auth.getProfile();
