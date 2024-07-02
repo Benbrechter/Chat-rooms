@@ -1,5 +1,62 @@
+import { useMutation, useQuery } from "@apollo/client"
+import { useContext, useState } from 'react';
+import { UPDATE_USER} from "../utils/mutations"
+import { QUERY_ME } from '../utils/queries'
+import Auth from "../utils/auth"
+
 export default function UpdateUser(){
+    const [formState , setFormState] = useState({username: "", bio: "" });
+    const { refetch } = useQuery(QUERY_ME);
+    const [updateUser] = useMutation(UPDATE_USER,  {
+        refetchQueries: [{ query: QUERY_ME }], // replace with your actual query name
+      });
+
+    const handleChange = (event) => {
+        const{name, value} = event.target;
+        setFormState(prev => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    const handleFormSubmit = async (event) =>{
+       event.preventDefault();
+       try{
+       const { data } = await updateUser({
+       variables: {
+       bio: formState.bio,
+       username: formState.username
+       },
+       });
+       console.log(data)
+
+       if (data.updateUser.token) {
+        Auth.login(data.updateUser.token);
+        }
+        await refetch();
+       setFormState({username: '', bio: ''})
+       }catch(error){
+        console.log(error)
+       } 
+    }
+
+
+
     return(
-        <h1>yyeyfbebf</h1>
+        <form action="submit" className="form-container" onSubmit={handleFormSubmit}>
+            <label htmlFor=""> Change Username</label>
+            <input   type="text"
+            placeholder='username'
+            name = 'username'
+            value = {formState.username}
+            onChange={handleChange}/>
+            <label htmlFor="">Change Bio</label>
+            <textarea   type="text"
+            placeholder='bio'
+            name = 'bio'
+            value = {formState.bio}
+            onChange={handleChange}></textarea>
+            <button type="submit">Submit</button>
+        </form>
     )
 }
