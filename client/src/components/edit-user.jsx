@@ -6,9 +6,10 @@ import Auth from "../utils/auth"
 
 export default function UpdateUser(){
     const [formState , setFormState] = useState({username: "", bio: "" });
+    //we need to refetch because the data is persisting through the json webtoken
     const { refetch } = useQuery(QUERY_ME);
     const [updateUser] = useMutation(UPDATE_USER,  {
-        refetchQueries: [{ query: QUERY_ME }], // replace with your actual query name
+        refetchQueries: [{ query: QUERY_ME }],
       });
 
     const handleChange = (event) => {
@@ -22,6 +23,8 @@ export default function UpdateUser(){
     const handleFormSubmit = async (event) =>{
        event.preventDefault();
        try{
+        //we grab the data from the updated user
+        //the bio and username we get from state 
        const { data } = await updateUser({
        variables: {
        bio: formState.bio,
@@ -34,6 +37,7 @@ export default function UpdateUser(){
         Auth.login(data.updateUser.token);
         }
         await refetch();
+        //reset state to '' so we can change it again 
        setFormState({username: '', bio: ''})
        }catch(error){
         console.log(error)
