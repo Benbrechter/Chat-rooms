@@ -45,7 +45,7 @@ type Query {
     addMessage(chatroomId: ID!, content: String!, userId: ID): Chatroom
     addChatroom(title: String!): Chatroom
     updateUser(username: String, email: String, password: String, friends: [String], bio: String, profilePicture: String):Auth
-    addFriend(userId: ID!, friendId: ID!): User
+    addFriend(username: String!, friendUsername: String!): User
 }
 `
 
