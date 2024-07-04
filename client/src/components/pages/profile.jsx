@@ -16,6 +16,7 @@ function Profile() {
             <h1>Profile</h1>
             {Auth.loggedIn() ? (
                 <div>
+                    <img src="" alt="" />
                     <p>Welcome, {userProfile.data.username}</p>
                     <p>Bio: {userProfile.data.bio}</p>
                     <p>friends: {userProfile.data.friends.length}</p>

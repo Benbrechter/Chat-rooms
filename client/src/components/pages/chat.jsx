@@ -54,6 +54,7 @@ function Chat() {
       {/* need to render chatroom details */}
       <div>
         {chatroomData.messages && chatroomData.messages.map((message, index) => (
+          // console.log(message)
           <div key={message.id || `message-${index}`}>
             <h3>{message.username}: </h3>
             <p>{message.messageText}</p>

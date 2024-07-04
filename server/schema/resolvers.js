@@ -124,16 +124,16 @@ const resolvers = {
     
           throw new AuthenticationError('You need to be logged in!');
         },
-          addFriend: async (parent, { userId, friendId }, context) => {
+          addFriend: async (parent, { username, friendUsername }, context) => {
             try {
               // Ensure both userId and friendId are provided
-              if (!userId || !friendId) {
-                throw new Error('Both userId and friendId are required');
+              if (!username || !friendUsername) {
+                throw new Error('Both username and friendUsername are required');
               }
       
               // Find both users by their IDs
-              const user = await User.findById(userId);
-              const friend = await User.findById(friendId);
+              const user = await User.findOne({username});
+              const friend = await User.findOne({username: friendUsername});
       
               if (!user) {
                 throw new Error('User not found');
@@ -144,14 +144,14 @@ const resolvers = {
               }
       
               // Add friendId to user's friends list if not already added
-              if (!user.friends.includes(friendId)) {
-                user.friends.push(friendId);
+              if (!user.friends.includes(friend._id)) {
+                user.friends.push(friend._id);
                 await user.save();
               }
       
               // Add userId to friend's friends list if not already added
-              if (!friend.friends.includes(userId)) {
-                friend.friends.push(userId);
+              if (!friend.friends.includes(user._id)) {
+                friend.friends.push(user._id);
                 await friend.save();
               }
       

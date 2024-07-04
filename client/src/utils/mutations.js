@@ -24,22 +24,19 @@ mutation Mutation($username: String!, $email: String!, $password: String!) {
 }
 `
 export const UPDATE_USER = gql`
-mutation Mutation($username: String, $bio: String, $profilePicture: String) {
-  updateUser(username: $username, bio: $bio, profilePicture: $profilePicture) {
-    token
-    user {
+mutation UpdateUser {
+  updateUser {
+    _id
+    username
+    email
+    password
+    bio
+    profilePicture
+    friends {
       _id
       username
       email
       password
-      friends {
-        _id
-        username
-        email
-        password
-        bio
-        profilePicture
-      }
       bio
       profilePicture
     }
@@ -133,8 +130,8 @@ mutation AddMessage($chatroomId: ID!, $content: String!) {
 }
 ` 
 export const ADD_FRIEND = gql`
-mutation Mutation($userId: ID!, $friendId: ID!) {
-  addFriend(userId: $userId, friendId: $friendId) {
+mutation AddFriend($username: String, $friendUsername: String) {
+  addFriend(username: $username, friendUsername: $friendUsername) {
     _id
     username
     email

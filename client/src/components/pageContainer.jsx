@@ -6,6 +6,7 @@ import Profile from './pages/profile';
 import Chat from './pages/chat';
 import Login from './pages/login-page'
 import EditUser from './edit-user'
+import AddFriend from './add-friend';
 
 //routes identifies all the routes possible on the page and assignes them a value
 export default function PageContainer() {
@@ -22,6 +23,7 @@ export default function PageContainer() {
               <Route path= '/login' element = {<Login/>}/>
               <Route path= '/edit-user' element = {<EditUser/>} />
               <Route path="*" element={<Navigate to="/" replace />} />
+              <Route path= "/add-friend" element={ < AddFriend/>}/>
             </Routes>
           </main>
         </div>
