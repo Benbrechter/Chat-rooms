@@ -82,3 +82,15 @@ query GetAllChatrooms {
   }
 }
 `
+export const QUERY_ONE_USER = gql `
+query GetOneUser($username: String) {
+  getOneUser(username: $username) {
+    _id
+    username
+    email
+    password
+    bio
+    profilePicture
+  }
+}
+`
