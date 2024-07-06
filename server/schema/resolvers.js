@@ -11,6 +11,20 @@ const resolvers = {
       const user = await User.find()
       return user
     },
+    getOneUser: async (parent, {username}, context) => {
+      try{
+   const user = await User.findOne({username})
+
+      if(!user){
+        console.log('no user found')
+      }
+
+      return user
+    
+      }catch(error){
+        console.log(error)
+      }
+    },
     getAllChatrooms: async () => {
         const chatroom = await Chatroom.find()
 

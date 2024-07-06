@@ -36,6 +36,7 @@ type Query {
     getAllUser: [User]
     getAllChatrooms: [Chatroom]
     getChatroom(id: ID!): Chatroom
+    getOneUser(username: String): User
 
 } 
 

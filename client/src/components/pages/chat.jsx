@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import {QUERY_CHATROOM} from '../../utils/queries'
 import {ADD_MESSAGE} from '../../utils/mutations'
@@ -46,7 +46,6 @@ function Chat() {
   if (error) return <p>Error: {error.message}</p>;
 
   const chatroomData = data?.getChatroom || [];
- 
 
   return (
     <div>
@@ -56,7 +55,7 @@ function Chat() {
         {chatroomData.messages && chatroomData.messages.map((message, index) => (
           // console.log(message)
           <div key={message.id || `message-${index}`}>
-            <h3>{message.username}: </h3>
+           <Link to= {`/friend/${message.username}`}><h3>{message.username}: </h3></Link> 
             <p>{message.messageText}</p>
           </div>
         ))}
